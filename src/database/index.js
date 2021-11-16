@@ -16,7 +16,6 @@ module.exports.connect = (number)=>{
     });
 }
 
-
 module.exports.onConnect = (callback) => {
     connectionCallback = callback;
 }

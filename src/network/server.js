@@ -21,19 +21,19 @@ async function checkPort(){
 
 async function runServer(){
 
-    await checkPort() 
+    await checkPort()
     const app = express()
 
     app.get('/', (req, res) => {
-    res.send('Success')
+        res.send('Success')
     })
 
     app.get('/chain',(req,res)=>{
         
-        let database = require("./src/database");
+        let database = require("../database");
         database.connect("a")
         database.onConnect(() => {
-            let BlockChain = require("./src/blockChain")
+            let BlockChain = require("../blockChain")
             let blockChain = new BlockChain()
             console.log(blockChain.getChain())
             res.send("chain")
@@ -41,8 +41,9 @@ async function runServer(){
     })
 
     app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`)
+    // console.log(`Server listening at http://localhost:${port}`)
     })
+    
 }
 
-runServer()
+module.exports.runServer = runServer
