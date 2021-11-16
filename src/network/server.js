@@ -1,44 +1,48 @@
 const express = require('express')
-const axios = require('axios')
+const fetch = require('node-fetch-commonjs');
 
 var port = 3000
-for (let i=0;i<10;i++)
-{
-    flag = false
-    response = axios.get("http://localhost:"+(port).toString())
-        .then(function (response) {
-            return response
-        })
-    console.log(response.data)
-    if (response.data  == null){
-        flag = true
-    }
-    if (flag == true){
-        break
-    }else{
+async function checkPort(){
+    for (let i=0;i<10;i++)
+    {
+        url = "http://localhost:"+(port).toString()+"/"
+        
+            response = await fetch(url)
+            .then((resp)=>{return resp})
+            .catch((e)=>{return e})
+            
+            if (response.status !=200){
+                break
+            }
+            // console.log(response.status)
         port +=1
     }
-    
 }
 
-const app = express()
+async function runServer(){
 
-app.get('/', (req, res) => {
-  res.send('Success')
-})
+    await checkPort() 
+    const app = express()
 
-app.get('/chain',(req,res)=>{
-    
-    let database = require("./src/database");
-    database.connect("a")
-    database.onConnect(() => {
-        let BlockChain = require("./src/blockChain")
-        let blockChain = new BlockChain()
-        console.log(blockChain.getChain())
-        res.send("chain")
+    app.get('/', (req, res) => {
+    res.send('Success')
     })
-})
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+    app.get('/chain',(req,res)=>{
+        
+        let database = require("./src/database");
+        database.connect("a")
+        database.onConnect(() => {
+            let BlockChain = require("./src/blockChain")
+            let blockChain = new BlockChain()
+            console.log(blockChain.getChain())
+            res.send("chain")
+        })
+    })
+
+    app.listen(port, () => {
+    console.log(`Server listening at http://localhost:${port}`)
+    })
+}
+
+runServer()
