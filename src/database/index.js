@@ -3,19 +3,20 @@ let mongoose = require("mongoose")
 let BlockChainModel = require("./model");
 
 let connectionCallback = () => {};
-module.exports.connect = (number)=>{
-    //Connect to DB
-    
-    url = "mongodb://localhost:27017/BlockChain_" + number
-    console.log(url)
-    mongoose.connect(url, (err) => {
-        if(err) 
-            return console.log("Cannot connect to DB");
-        console.log("Database is Connected");
-        connectionCallback();
-    });
-}
+let doc_code = "A"
 
-module.exports.onConnect = (callback) => {
+//Connect to DB
+url = "mongodb://localhost:27017/BlockChain_" + doc_code
+console.log(url)
+mongoose.connect(url, (err) => {
+    if(err) 
+        return console.log("Cannot connect to DB");
+    console.log("Database is Connected");
+    connectionCallback();
+});
+
+module.exports.onConnect = (callback,number) => {
+    doc_code = number
     connectionCallback = callback;
 }
+

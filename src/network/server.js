@@ -43,6 +43,12 @@ async function runServer(){
     app.listen(port, () => {
     // console.log(`Server listening at http://localhost:${port}`)
     })
+
+    return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(port);
+        }, 2000);
+      });
     
 }
 
