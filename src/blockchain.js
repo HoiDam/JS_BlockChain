@@ -31,16 +31,8 @@ class BlockChain {
             return callback(block)
           })
         }
-
-    addNewBlock(prevHash) {
-      let block = {
-        index: null,
-        timestamp: Date.now(),
-        transactions: this.curr_transactions,
-        prevHash: prevHash
-      };
-     
-     getDifficulty() {
+      
+    getDifficulty() {
       const latestBlock = this.getLatestBlock();
       if (
         latestBlock.index % DIFFICULTY_ADJUSTMENT_INTERVAL === 0 &&
@@ -51,6 +43,15 @@ class BlockChain {
         return latestBlock.difficulty;
       }
     }
+    addNewBlock(prevHash) {
+      let block = {
+        index: null,
+        timestamp: Date.now(),
+        transactions: this.curr_transactions,
+        prevHash: prevHash
+      };
+     
+     
 
 
       if (validator.proofOfWork() == TARGET_HASH) {
