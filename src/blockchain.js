@@ -32,6 +32,19 @@ class BlockChain {
         transactions: this.curr_transactions,
         prevHash: prevHash
       };
+     
+     getDifficulty() {
+      const latestBlock = this.getLatestBlock();
+      if (
+        latestBlock.index % DIFFICULTY_ADJUSTMENT_INTERVAL === 0 &&
+        latestBlock.index !== 0
+      ) {
+        return getAdjustedDifficulty(latestBlock, this.blockchain);
+      } else {
+        return latestBlock.difficulty;
+      }
+    }
+
 
       if (validator.proofOfWork() == TARGET_HASH) {
         block.hash = hash(block);
