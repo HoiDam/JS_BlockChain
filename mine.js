@@ -1,7 +1,8 @@
 
 async function mining(doc_code){
     let database = require("./src/database");
-    database.onConnect(()  => {
+
+    database.onConnect(async()  => {
         let BlockChain = require("./src/blockChain")
     
         let blockChain = new BlockChain();
@@ -12,7 +13,7 @@ async function mining(doc_code){
     
         let validProof = (proof) => {
             let guessHash = hash(proof);
-            console.log("Hashing: ", guessHash);
+            console.log("Hashing: ", guessHash); //Uncomment it
             return guessHash == hash(PROOF);
         };
     
@@ -28,7 +29,7 @@ async function mining(doc_code){
         }
     
         if (proofOfWork() == PROOF) {
-            blockChain.addNewTransaction("islem", "alex", 200);
+            blockChain.addNewTransaction("", "alex", 200);
             let prevHash = blockChain.lastBock() ?
                 blockChain
                 .lastBock()
@@ -37,17 +38,19 @@ async function mining(doc_code){
             blockChain.addNewBlock(prevHash);    
         }
     
-        blockChain.addNewTransaction("islem", "alex", 200);
+        blockChain.addNewTransaction("", "alex", 200);
         blockChain.addNewBlock(null);
     
-    console.log("Chain : ", blockChain.chain);
-    
+        console.log("Chain : ", blockChain.chain); //Uncomment it
+        
     },doc_code)
-    // return new Promise(resolve => {
-    //     setTimeout(() => {
-    //       resolve();
-    //     }, 2000);
-    //   });
+    return new Promise(resolve => {
+        setTimeout(() => {
+          resolve();
+        }, 2000);
+      });
+    
+    
 }
 
 module.exports.mining = mining

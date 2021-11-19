@@ -2,7 +2,8 @@ let hash = require('object-hash');
 const TARGET_HASH = hash(1560);
 let validator = require("./validator");
 let mongoose = require("mongoose");
-let blockChainModel = mongoose.model("BlockChain");
+let blockChainSchema = require("./database/model").schema
+let blockChainModel 
 let chalk = require("chalk");
 
 
@@ -10,10 +11,16 @@ class BlockChain {
     constructor() {
       this.chain = [];
       this.curr_transactions = [];
+      blockChainModel = mongoose.model("blocks",blockChainSchema);
     }
 
-    getChain(){
-      return blockChainModel.find()
+    async getChain(){
+      let chains = await blockChainModel.find()
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(chains);
+        }, 2000);
+      });
     }
 
     getLastBlock(callback) {
@@ -76,6 +83,17 @@ class BlockChain {
 
     isEmpty() {
       return this.chain.length == 0;
+    }
+    
+    async replaceContent(docArray){
+      for (const doc in docArray ){
+        // console.log(docArray[doc]["_id"])
+        let id = docArray[doc]["_id"]
+        delete docArray[doc]["_id"]
+        await blockChainModel.findOneAndUpdate({ _id: id },
+          docArray[doc],
+          { upsert: true });
+      }
     }
 }
 

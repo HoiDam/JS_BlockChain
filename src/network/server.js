@@ -1,6 +1,7 @@
 const express = require('express')
 const fetch = require('node-fetch-commonjs');
 
+const defaultPort = 3000
 var port = 3000
 async function checkPort(){
     for (let i=0;i<10;i++)
@@ -23,21 +24,23 @@ async function runServer(){
 
     await checkPort()
     const app = express()
+    const doc_code = String.fromCharCode("A".charCodeAt(0) + port-defaultPort);
+
+    app.use(express.json());
 
     app.get('/', (req, res) => {
         res.send('Success')
     })
 
-    app.get('/chain',(req,res)=>{
-        
+    app.post('/postChain',(req,res)=>{
+        let docArray = req.body
         let database = require("../database");
-        database.connect("a")
         database.onConnect(() => {
             let BlockChain = require("../blockChain")
             let blockChain = new BlockChain()
-            console.log(blockChain.getChain())
-            res.send("chain")
-        })
+            blockChain.replaceContent(docArray)
+        },doc_code)
+        res.send(null)
     })
 
     app.listen(port, () => {
@@ -46,7 +49,7 @@ async function runServer(){
 
     return new Promise(resolve => {
         setTimeout(() => {
-          resolve(port);
+          resolve({port,doc_code});
         }, 2000);
       });
     
