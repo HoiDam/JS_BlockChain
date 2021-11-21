@@ -10,7 +10,7 @@ let chalk = require("chalk");
 class BlockChain {
     constructor() {
       this.chain = [];
-      this.curr_transactions = [];
+      this.transactions = [];
       blockChainModel = mongoose.model("blocks",blockChainSchema);
     }
 
@@ -47,13 +47,10 @@ class BlockChain {
       let block = {
         index: null,
         timestamp: Date.now(),
-        transactions: this.curr_transactions,
+        transactions: this.transactions,
         prevHash: prevHash
       };
-     
-     
-
-
+    
       if (validator.proofOfWork() == TARGET_HASH) {
         block.hash = hash(block);
 
@@ -77,7 +74,7 @@ class BlockChain {
           this
             .chain 
             .push(block);
-          this.curr_transactions = [];
+          this.transactions = [];
           return block;
         });
 
@@ -86,7 +83,7 @@ class BlockChain {
 
     addNewTransaction(sender, recipient, amount) {
       this
-        .curr_transactions
+        .transactions
         .push({ sender, recipient, amount });
     }
 
