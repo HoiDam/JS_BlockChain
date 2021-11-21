@@ -1,7 +1,31 @@
 const fetch = require('node-fetch-commonjs');
 
+module.exports.getChain = async(targetPort,doc_code)=>{
+    let url = "http://localhost:"+(targetPort).toString()+"/getBlock"
+    await fetch(url)
+    .then((res)=>{
+        return res.json()
+    })
+    .then((docArray)=>{
+        // console.log(docArray)
+        if (docArray != null){
+            let database = require("../database");
+            database.onConnect(() => {
+                let BlockChain = require("../blockChain")
+                let blockChain = new BlockChain()
+                blockChain.replaceContent(docArray)
+            },doc_code)
+            console.log("Get Block Done !")
+        }else{
+            console.error("Cant get from ",targetPort)
+        }
+    })
+    .catch((e)=>{return null})
+    
 
-module.exports.postChain = (portOri,doc_code)=>{
+}
+
+module.exports.postChain = (targetPort,doc_code)=>{
     let database = require("../database");
     var port = 3000
     database.onConnect(async()  => {
@@ -12,7 +36,7 @@ module.exports.postChain = (portOri,doc_code)=>{
         
         for (let i=0;i<10;i++)
             {
-                if (portOri != port+i){ //prevent selfposting
+                if (targetPort != port+i){ //prevent selfposting
                     url = "http://localhost:"+(port+i).toString()+"/postChain"
                     try{
                         fetch(url, {
@@ -27,7 +51,6 @@ module.exports.postChain = (portOri,doc_code)=>{
                     catch(e){
                         break
                     }
-                        // console.log(response.status)
                 }
                 
             }

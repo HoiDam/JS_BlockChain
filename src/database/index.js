@@ -10,7 +10,7 @@ function connectDB() {
     mongoose.connect(url, (err) => {
         if(err) 
             return console.log("Cannot connect to DB");
-        console.log("Database is Connected"); //to be uncomment
+        // console.log("Database is Connected"); //to be uncomment
         connectionCallback();
     });
 }

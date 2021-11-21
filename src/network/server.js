@@ -32,6 +32,16 @@ async function runServer(){
         res.send('Success')
     })
 
+    app.get('/getBlock',(req,res)=>{
+        let database = require("../database");
+        database.onConnect(async()  => {
+            let BlockChain = require("../blockChain")
+            let blockChain = new BlockChain();
+            chains = await blockChain.getChain() //return chain
+            res.send(JSON.stringify(chains))
+        },doc_code)
+    })
+
     app.post('/postChain',(req,res)=>{
         let docArray = req.body
         let database = require("../database");
