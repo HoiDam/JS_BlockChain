@@ -51,6 +51,10 @@ let utxoSchema = new Schema({
     transaction_id:{
         required: true,
         type: Schema.Types.String
+    },
+    prevHash:{
+        required: true,
+        type: Schema.Types.String
     }
 
 })

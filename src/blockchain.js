@@ -47,10 +47,11 @@ class BlockChain {
       function hash(string){
         return createHash('sha256').update(string).digest('hex');
       }
-      let transaction_id = hash(sender+recipient+amount.toString())
+      let prevHash = ""
+      let transaction_id = hash(prevHash+sender+recipient+amount.toString()).toString()
       this
         .transactions
-        .push({ transaction_id,sender, recipient, amount });
+        .push({ prevHash,transaction_id,sender, recipient, amount });
     }
 
     lastBock() {
