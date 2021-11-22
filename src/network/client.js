@@ -36,3 +36,36 @@ module.exports.postChain = (portOri,doc_code)=>{
 
 
 }
+
+// module.exports.postTrans = (sender,recipient,amount,transaction_id){
+//     let database = require("../database");
+//     var port = 3000
+//     database.onConnect(async()  => {
+//         let BlockChain = require("../blockChain")
+//         let trans = new BlockChain.transactions();
+//         chains = await blockChain.getChain() //return chain
+//         // console.log(chains)
+        
+//         for (let i=0;i<10;i++)
+//             {
+//                 if (portOri != port+i){ //prevent selfposting
+//                     url = "http://localhost:"+(port+i).toString()+"/postChain"
+//                     try{
+//                         fetch(url, {
+//                             method: 'post',
+//                             headers: {
+//                                 'Accept': 'application/json, text/plain, */*',
+//                                 'Content-Type': 'application/json'
+//                             },
+//                             body: JSON.stringify(sender,recipient,amount,transaction_id)
+//                         }).catch(()=>{})
+//                     }
+//                     catch(e){
+//                         break
+//                     }
+//                         // console.log(response.status)
+//                 }
+                
+//             }
+//         },doc_code)
+// }

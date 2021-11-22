@@ -1,45 +1,38 @@
-async function transaction(sender, recipient, amount) {
-    let database = require("./src/database");
+const {createHash} = require('crypto');
+
+function hash(string){
+  return createHash('sha256').update(string).digest('hex');
+}
+
+async function transaction(doc_code,sender,recipient,amount) {
+    let database = require("./database");
+
 
     database.onConnect(async() =>{
     
-    let BlockChain = require("./blockchain")
+      let BlockChain = require("./blockChain")
 
-    let blockChain = new BlockChain();
+      let blockChain = new BlockChain();
 
-    if(!sender || !recipient){
-      throw new Error('Sender and recipient address must all be included in the transaction');
-    }
-
-    if(amount<=0 || isNaN(amount) == true ){
+    if(amount<=0){
       throw new Error('The transaction amount should be larger than 0 and is a number')
     }
 
-    let balance = 0;
+    value_to_hash = sender + recipient + amount;
+    transaction_id = hash(value_to_hash);
 
-    for (const block of this.chain) {
-      for (const trans of block.transactions) {
-        if (trans.sender === address) {
-          balance -= trans.amount;
-        }
-
-        if (trans.recipient === address) {
-          balance += trans.amount;
-        }
-      }
-    }
-    
-    if(balance < amount){
-      throw new Error('The balance is insufficient');
-    }
-
-    blockChain.addNewTransaction(sender, recipient, amount);
+    blockChain.addNewTransaction(sender, recipient, amount, transaction_id);
 
     console.log("Transaction completed!")
-    console.log("Block : ", blockChain.transaction);
+    console.log("Transaction : ", blockChain.transactions);
 
-    })
+    },doc_code)
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve();
+      }, 2000);
+    });
 }
 
 
-module.exports.transactions = transaction
+module.exports.transaction = transaction

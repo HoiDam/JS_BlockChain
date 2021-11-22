@@ -3,6 +3,7 @@ async function getAllTransactionsForWallet(address){
     const txs = [];
 
     database.onConnect(async()=> {
+        let record = () =>{
         for (const block of this.chain) {
             for (const tx of block.transactions) {
               if (tx.sender === address || tx.recipient === address) {
@@ -10,10 +11,10 @@ async function getAllTransactionsForWallet(address){
               }
             }
           }
-      
+        }
           return txs;
     })
     
   }
 
-  module.exports.getAllTransactionsForWallet = utxo_list
+  module.exports.getAllTransactionsForWallet = getAllTransactionsForWallet

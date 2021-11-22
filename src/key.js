@@ -1,21 +1,32 @@
-// class Key{
-//     constructor(){
-        
-//             const EC = require('elliptic').ec;
-//             const ec = new EC('secp256k1');
-            
-//             const key = ec.genKeyPair();
-//             const public_key = key.getPublic('hex');
-//             const private_key = key.getPrivate('hex');
-// }
+class key {
+        constructor() {}
+    
+key_gen(){
+const fs = require('fs');
 
-// print_key(){
-// console.log();
-// console.log('Your public key (also your wallet address, freely shareable)\n',this.public_key);
+    const EC = require('elliptic').ec;
+    const ec = new EC('secp256k1');
+    
+    const key = ec.genKeyPair();
+    const public_key = key.getPublic('hex');
+    const private_key = key.getPrivate('hex');
 
-// console.log();
-// console.log('Your private key (keep this secret! To sign transactions)\n', this.private_key);
-// }
-// }
+    const key_pairs = {"Private_key": private_key, "Public_key": public_key};
+    const data = JSON.stringify(key_pairs);
 
-// module.exports = key;
+
+fs.writeFile('keys.json', data,(err)=>{
+
+    if(err){
+        throw err;
+    }
+ 
+    console.log('Your public key/wallet address : \n',public_key);
+    console.log('\nYour private key to sign a transaction : \n\n',private_key);     
+    
+
+})
+
+}
+}
+module.exports.key = key;

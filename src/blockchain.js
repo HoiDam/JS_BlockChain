@@ -6,6 +6,26 @@ let blockChainSchema = require("./database/model").schema
 let blockChainModel 
 let chalk = require("chalk");
 
+// class Block {
+
+//   constructor(timestamp, transactions, previousHash = '') {
+//     this.previousHash = previousHash;
+//     this.timestamp = timestamp;
+//     this.transactions = transactions;
+//     this.nonce = 0;
+//     this.hash = 0;
+//   }
+
+//   async getBlock(){
+//     let block = await blockChainModel.find()
+//     return new Promise(resolve => {
+//       setTimeout(() => {
+//         resolve(chains);
+//       }, 2000);
+//     });
+
+//   }
+// }
 
 class BlockChain {
     constructor() {
@@ -23,6 +43,7 @@ class BlockChain {
       });
     }
 
+
     getLastBlock(callback) {
           return blockChainModel.findOne({}, null, { sort: { _id: -1}, limit: 1 }, (err, block) => {
           
@@ -31,7 +52,7 @@ class BlockChain {
             return callback(block)
           })
         }
-      
+
     getDifficulty() {
       const latestBlock = this.getLatestBlock();
       if (
@@ -81,10 +102,18 @@ class BlockChain {
       }
     }
 
-    addNewTransaction(sender, recipient, amount) {
+    addNewTransaction(sender, recipient, amount,transaction_id) {
+      
+      let transaction = {
+        sender: sender,
+        recipient: recipient,
+        amount: amount, 
+        transaction_id: transaction_id
+      };
       this
-        .transactions
-        .push({ sender, recipient, amount });
+      .transactions
+      .push(transaction);
+      return transaction;
     }
 
     lastBock() {
@@ -106,6 +135,34 @@ class BlockChain {
           { upsert: true });
       }
     }
+}
+
+class Block{
+  constructor(timestamp, transaction, prevHash = ''){
+    this.prevHash = prevHash;
+    this.timestamp = timestamp;
+    this.transaction = transaction;
+    this.nonce = 0;
+    this.hash = 0;
+  }
+
+  getBalanceOfAddress(address) {
+    let balance = 0;
+
+      for (const trans of Block.transaction) {
+        if (trans.sender === address) {
+          balance -= trans.amount;
+        }
+
+        if (trans.recipient === address) {
+          balance += trans.amount;
+        }
+      }
+
+    debug('getBalanceOfAdrees: %s', balance);
+    return balance;
+  }
+  
 }
 
 module.exports = BlockChain;

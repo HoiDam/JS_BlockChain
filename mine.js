@@ -38,7 +38,8 @@ async function mining(doc_code){
             blockChain.addNewBlock(prevHash);    
         }
     
-        blockChain.addNewTransaction("", "alex", 200);
+        value = 'alex' + 200
+        blockChain.addNewTransaction("", "alex", 200, hash(value));
         blockChain.addNewBlock(null);
     
         console.log("Chain : ", blockChain.chain); //Uncomment it
