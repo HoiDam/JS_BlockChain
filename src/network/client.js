@@ -15,7 +15,7 @@ module.exports.getChain = async(targetPort,doc_code)=>{
                 let blockChain = new BlockChain()
                 blockChain.replaceContent(docArray)
             },doc_code)
-            console.log("Get Block Done !")
+            console.log("Get Block Done!")
         }else{
             console.error("Cant get from ",targetPort)
         }

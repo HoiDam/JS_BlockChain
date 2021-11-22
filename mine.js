@@ -1,4 +1,3 @@
-
 async function mining(doc_code){
     let database = require("./src/database");
 
@@ -50,7 +49,7 @@ async function mining(doc_code){
         }
         proofOfWork()   
         block.hash = guessHash
-        blockChain.addNewTransaction("", "alex", 200);
+        blockChain.addNewTransaction("", "alex", Math.floor(Math.random() * (5000 - 10) + 10));
         blockChain.addNewBlock(block);    
     
         console.log("Chain : ", blockChain.chain); //Uncomment it

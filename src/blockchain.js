@@ -43,9 +43,14 @@ class BlockChain {
     }
 
     addNewTransaction(sender, recipient, amount) {
+      const {createHash} = require('crypto');
+      function hash(string){
+        return createHash('sha256').update(string).digest('hex');
+      }
+      let transaction_id = hash(sender+recipient+amount.toString())
       this
         .transactions
-        .push({ sender, recipient, amount });
+        .push({ transaction_id,sender, recipient, amount });
     }
 
     lastBock() {
@@ -70,3 +75,4 @@ class BlockChain {
 }
 
 module.exports = BlockChain;
+

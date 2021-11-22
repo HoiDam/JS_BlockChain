@@ -35,5 +35,25 @@ let BlockChainSchema = new Schema({
     }
 });
 
+let utxoSchema = new Schema({
+    sender: {
+        required: true,
+        type: Schema.Types.String
+    },
+    recipient:{
+        required: true,
+        type: Schema.Types.String
+    },
+    amount:{
+        required: true,
+        type: Schema.Types.String
+    },
+    transaction_id:{
+        required: true,
+        type: Schema.Types.String
+    }
+
+})
 
 module.exports.schema = BlockChainSchema
+module.exports.utxoSchema = utxoSchema

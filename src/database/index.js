@@ -5,7 +5,7 @@ let doc_code
 
 function connectDB() {
     //Connect to DB
-    url = "mongodb://localhost:27017/BlockChain_" + doc_code
+    url = "mongodb://localhost:27017/User_" + doc_code
     // console.log(url)
     mongoose.connect(url, (err) => {
         if(err) 
