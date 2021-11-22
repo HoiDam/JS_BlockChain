@@ -11,8 +11,7 @@ let BlockChainSchema = new Schema({
     },
     timestamp: {
         required: true,
-        type: Schema.Types.Date,
-        default: Date.now(),
+        type: Schema.Types.Number
     },
     transactions: {
         required: true,
@@ -25,6 +24,14 @@ let BlockChainSchema = new Schema({
     hash: {
         required: true,
         type: Schema.Types.String
+    },
+    difficulty:{
+        required: true,
+        type: Schema.Types.Number
+    },
+    nonce:{
+        required: true,
+        type: Schema.Types.Number
     }
 });
 

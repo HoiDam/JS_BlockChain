@@ -4,42 +4,54 @@ async function mining(doc_code){
 
     database.onConnect(async()  => {
         let BlockChain = require("./src/blockChain")
-    
         let blockChain = new BlockChain();
-    
-        let hash = require('object-hash');
-    
-        let PROOF = 1560;
-    
-        let validProof = (proof) => {
-            let guessHash = hash(proof);
+
+        var hash = require("crypto-js/sha256");
+        let PROOF = Math.floor(Math.random() * (Math.pow(10,8) - Math.pow(10,4))) + Math.pow(10,4);
+        
+        let prevBlock = await blockChain.getLastBlock()
+        var block = {
+            index: 0,
+            transactions: null,
+            timestamp: Math.floor(Date.now()),
+            prevHash: null,
+            difficulty: PROOF,
+            nonce: 0,
+            hash:null
+        };
+        
+        if(prevBlock != null) {
+            block.prevHash = prevBlock.hash;
+            block.index = prevBlock.index +1
+        }
+
+        var guessHash = ""
+        let validProof = (block) => {
+            guessHash = ""
+            for (var key in block){
+                if (block[key] != null){
+                    guessHash += block[key].toString()
+                }
+            }
+            guessHash = hash(guessHash).toString()
             console.log("Hashing: ", guessHash); //Uncomment it
-            return guessHash == hash(PROOF);
+            return guessHash < hash(block.difficulty).toString();
         };
     
         let proofOfWork = () => {
-            let proof = 0;
             while (true) {
-                if (!validProof(proof)){
-                    proof++;
+                if (!validProof(block)){
+                    block.nonce = block.nonce+1;
                 } else {
+                    
                     break;
                 }
             }
         }
-    
-        if (proofOfWork() == PROOF) {
-            blockChain.addNewTransaction("", "alex", 200);
-            let prevHash = blockChain.lastBock() ?
-                blockChain
-                .lastBock()
-                .hash :
-                null;
-            blockChain.addNewBlock(prevHash);    
-        }
-    
+        proofOfWork()   
+        block.hash = guessHash
         blockChain.addNewTransaction("", "alex", 200);
-        blockChain.addNewBlock(null);
+        blockChain.addNewBlock(block);    
     
         console.log("Chain : ", blockChain.chain); //Uncomment it
         

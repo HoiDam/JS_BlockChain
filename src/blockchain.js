@@ -1,6 +1,3 @@
-let hash = require('object-hash');
-const TARGET_HASH = hash(1560);
-let validator = require("./validator");
 let mongoose = require("mongoose");
 let blockChainSchema = require("./database/model").schema
 let blockChainModel 
@@ -23,62 +20,26 @@ class BlockChain {
       });
     }
 
-    getLastBlock(callback) {
-          return blockChainModel.findOne({}, null, { sort: { _id: -1}, limit: 1 }, (err, block) => {
-          
-            if(err) 
-              return console.error("Cannot find Last Block");
-            return callback(block)
-          })
-        }
-      
-    getDifficulty() {
-      const latestBlock = this.getLatestBlock();
-      if (
-        latestBlock.index % DIFFICULTY_ADJUSTMENT_INTERVAL === 0 &&
-        latestBlock.index !== 0
-      ) {
-        return getAdjustedDifficulty(latestBlock, this.blockchain);
-      } else {
-        return latestBlock.difficulty;
-      }
+    async getLastBlock() {
+          return blockChainModel.findOne({}, null, { sort: { _id: -1}, limit: 1 })
     }
-    addNewBlock(prevHash) {
-      let block = {
-        index: null,
-        timestamp: Date.now(),
-        transactions: this.transactions,
-        prevHash: prevHash
-      };
-    
-      if (validator.proofOfWork() == TARGET_HASH) {
-        block.hash = hash(block);
+      
+  
+    addNewBlock(block) {
+      block.transactions = this.transactions
+      let newBlock = new blockChainModel(block);
+      // console.error(newBlock)
+      newBlock.save((err) => {
+        if (err)
+          return console.log(chalk.red("Cannot save the Block to DB ", err.message));
+        console.log(chalk.green("Block Saved on the DB"));
+      });
+      this
+        .chain 
+        .push(block);
+      this.transactions = [];
+      return block;
 
-        let lastBlock = null;
-        this.getLastBlock((lastBlock) => {
-          // console.error(lastBlock)
-          if(lastBlock) {
-            block.prevHash = lastBlock.hash;
-            block.index = lastBlock.index +1
-          }else{
-            block.prevHash = null;
-            block.index = 0
-          }
-          let newBlock = new blockChainModel(block);
-          console.error(newBlock)
-          newBlock.save((err) => {
-            if (err)
-              return console.log(chalk.red("Cannot save the Block to DB ", err.message));
-            console.log(chalk.green("Block Saved on the DB"));
-          });
-          this
-            .chain 
-            .push(block);
-          this.transactions = [];
-          return block;
-        });
-
-      }
     }
 
     addNewTransaction(sender, recipient, amount) {
