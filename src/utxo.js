@@ -41,5 +41,10 @@ async function utxo_list(doc_code){
       console.log("Saved in database")
       
   },doc_code)
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, 2000);
+  });
 }
 module.exports.utxo_list = utxo_list

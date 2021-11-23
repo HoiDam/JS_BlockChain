@@ -27,7 +27,7 @@ let BlockChainSchema = new Schema({
     },
     difficulty:{
         required: true,
-        type: Schema.Types.Number
+        type: Schema.Types.String
     },
     nonce:{
         required: true,

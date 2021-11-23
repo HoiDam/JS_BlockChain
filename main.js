@@ -39,7 +39,7 @@ var recursiveAsyncReadLine = async function (readline,port,doc_code) {
       else if(ans==4){
         const utxo = require('./src/utxo')
         utxo.utxo_list(doc_code)
-        recursiveAsyncReadLine(readline,port,doc_code)
+        // recursiveAsyncReadLine(readline,port,doc_code)
       }
 
       else if(ans==5){
@@ -49,8 +49,9 @@ var recursiveAsyncReadLine = async function (readline,port,doc_code) {
             await client.getChain(req_port,doc_code)
           }
           promise(req_port,doc_code)
+          
         })
-        recursiveAsyncReadLine(readline,port,doc_code)
+        // recursiveAsyncReadLine(readline,port,doc_code)
       }
       else if(ans==6){
         var hash = require("crypto-js/sha256");
