@@ -7,7 +7,7 @@ async function mining(doc_code){
 
         var hash = require("crypto-js/sha256");
         let PROOF = Math.floor(Math.random() * (Math.pow(10,8) - Math.pow(10,4))) + Math.pow(10,4);
-        let diff = Math.floor(Math.random() * (4))
+        let diff = Math.floor(Math.random() * (4-3)+3)
         PROOF = hash(PROOF).toString()
         for (let i = 0; i<diff;i+=1){
             PROOF = PROOF.substring(0, i) + '0' + PROOF.substring(i + 1);

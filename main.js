@@ -71,6 +71,25 @@ async function main(){
     input: process.stdin,
     output: process.stdout
   })
+  
+  var autoMine = true // ************************
+  const promise = async(port,doc_code)=>{
+    const mine = require('./mine')
+    while(true){
+      await mine.mining(doc_code)
+      .then(
+        ()=>{
+          let client = require("./src/network/client")
+          client.postChain(port,doc_code)
+        }
+      )
+    }
+  }
+
+  if (autoMine==true){
+    promise(port,doc_code)
+  }
+
   recursiveAsyncReadLine(readline,port,doc_code)
 }
 
